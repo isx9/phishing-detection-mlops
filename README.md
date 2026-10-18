@@ -12,7 +12,7 @@ The focus of this project is the engineering workflow around the model: making t
 
 Phishing websites imitate legitimate ones to steal credentials and personal data. The goal is to detect them automatically from characteristics of their URL and web page.
 
-- **Dataset:** [Web page Phishing Detection Dataset]([https://www.kaggle.com/datasets/shashwatwork/web-page-phishing-detection-dataset]) (Kaggle, by Shashwat Tiwari)
+- **Dataset:** [Web page Phishing Detection Dataset](https://www.kaggle.com/datasets/shashwatwork/web-page-phishing-detection-dataset) (Kaggle, by Shashwat Tiwari)
 - **Size:** 11,430 websites
 - **Features:** 87 numeric features describing the URL (length, number of dots, hyphens, use of an IP address...), the page content, and external information (domain age, web traffic, page rank...)
 - **Label:** `status`, either `legitimate` or `phishing`
