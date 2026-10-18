@@ -1,3 +1,5 @@
+import mlflow
+import mlflow.sklearn
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
@@ -26,11 +28,24 @@ def evaluate(model, X_test, y_test):
     }
 
 if __name__ == "__main__":
+    n_estimators = 100
+
     X, y = load_data()
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42, stratify=y
     )
-    model = train_model(X_train, y_train)
-    metrics = evaluate(model, X_test, y_test)
-    for name, value in metrics.items():
-        print(f"{name}: {value:.3f}")
+    
+    mlflow.set_experiment("phishing-detection")
+
+    with mlflow.start_run():
+        mlflow.log_param("n_estimators", n_estimators)
+        mlflow.log_param("test_size", 0.2)
+
+        model = train_model(X_train, y_train, n_estimators=n_estimators)
+        metrics = evaluate(model, X_test, y_test)
+
+        mlflow.log_metrics(metrics)
+        mlflow.sklearn.log_model(model, name="model", input_example=X_train.head())
+
+        for name, value in metrics.items():
+            print(f"{name}: {value:.3f}")
