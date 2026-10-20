@@ -15,11 +15,20 @@ def load_data(path=DATA_PATH):
     y = df["status"].map({"legitimate": 0, "phishing": 1})
     return X, y
 
-def train_model(X_train, y_train, n_estimators=100):
-    model = Pipeline(steps=[
+def build_model(n_estimators=100, max_depth=None, min_samples_split=2):
+    return Pipeline(steps=[
         ("imputer", SimpleImputer(strategy="median")),
-        ("classifier", RandomForestClassifier(n_estimators=n_estimators, random_state=42))
+        ("classifier", RandomForestClassifier(
+            n_estimators=n_estimators,
+            max_depth=max_depth,
+            min_samples_split=min_samples_split,
+            random_state=42,
+            n_jobs=-1,
+        )),
     ])
+
+def train_model(X_train, y_train, **params):
+    model = build_model(**params)
     model.fit(X_train, y_train)
     return model
 
