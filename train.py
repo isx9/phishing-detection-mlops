@@ -59,7 +59,11 @@ if __name__ == "__main__":
         metrics = evaluate(model, X_test, y_test)
 
         mlflow.log_metrics(metrics)
-        mlflow.sklearn.log_model(model, name="model", input_example=X_train.head().astype("float64"))
-
+        mlflow.sklearn.log_model(
+            model,
+            name="model",
+            input_example=X_train.head().astype("float64"),
+            registered_model_name="phishing-detector",
+        )
         for name, value in metrics.items():
             print(f"{name}: {value:.3f}")
