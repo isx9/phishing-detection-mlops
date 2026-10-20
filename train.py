@@ -4,6 +4,8 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, f1_score, recall_score
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
 
 DATA_PATH = "dataset_phishing.csv"
 
@@ -14,7 +16,10 @@ def load_data(path=DATA_PATH):
     return X, y
 
 def train_model(X_train, y_train, n_estimators=100):
-    model = RandomForestClassifier(n_estimators=n_estimators, random_state=42)
+    model = Pipeline(steps=[
+        ("imputer", SimpleImputer(strategy="median")),
+        ("classifier", RandomForestClassifier(n_estimators=n_estimators, random_state=42))
+    ])
     model.fit(X_train, y_train)
     return model
 
@@ -45,7 +50,7 @@ if __name__ == "__main__":
         metrics = evaluate(model, X_test, y_test)
 
         mlflow.log_metrics(metrics)
-        mlflow.sklearn.log_model(model, name="model", input_example=X_train.head())
+        mlflow.sklearn.log_model(model, name="model", input_example=X_train.head().astype("float64"))
 
         for name, value in metrics.items():
             print(f"{name}: {value:.3f}")

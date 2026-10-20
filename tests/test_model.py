@@ -40,3 +40,10 @@ def test_model_performance(model, data):
     metrics = evaluate(model, X_test, y_test)
     assert metrics["f1"] > 0.9
     assert metrics["recall"] > 0.9
+
+def test_model_handles_missing_values(model, data):
+    _, X_test, _, _ = data
+    X_missing = X_test.head(5).astype("float64")
+    X_missing.iloc[0,0] = float("nan")
+    preds = model.predict(X_missing)
+    assert len(preds) == 5
