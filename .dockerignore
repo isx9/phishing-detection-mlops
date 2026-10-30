@@ -1,0 +1,5 @@
+.venv/
+mlruns/
+.git/
+.pytest_cache/
+*.html

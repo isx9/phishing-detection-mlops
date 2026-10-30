@@ -221,3 +221,5 @@ __marimo__/
 .venv/
 mlruns/
 drift_report_*.html
+
+model/
